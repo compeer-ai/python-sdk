@@ -8,15 +8,15 @@ from typing_extensions import Required, Annotated, TypedDict
 
 import pytest
 
-from barque._types import Base64FileInput, omit, not_given
-from barque._utils import (
+from compeer._types import Base64FileInput, omit, not_given
+from compeer._utils import (
     PropertyInfo,
     transform as _transform,
     parse_datetime,
     async_transform as _async_transform,
 )
-from barque._compat import PYDANTIC_V1
-from barque._models import BaseModel
+from compeer._compat import PYDANTIC_V1
+from compeer._models import BaseModel
 
 _T = TypeVar("_T")
 

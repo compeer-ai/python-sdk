@@ -4,8 +4,8 @@ from typing import Sequence
 
 import pytest
 
-from barque._types import FileTypes, ArrayFormat
-from barque._utils import extract_files
+from compeer._types import FileTypes, ArrayFormat
+from compeer._utils import extract_files
 
 
 def test_removes_files_from_input() -> None:

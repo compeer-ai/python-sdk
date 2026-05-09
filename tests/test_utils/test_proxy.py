@@ -2,7 +2,7 @@ import operator
 from typing import Any
 from typing_extensions import override
 
-from barque._utils import LazyProxy
+from compeer._utils import LazyProxy
 
 
 class RecursiveLazyProxy(LazyProxy[Any]):

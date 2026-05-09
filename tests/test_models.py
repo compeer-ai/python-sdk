@@ -7,9 +7,9 @@ import pytest
 import pydantic
 from pydantic import Field
 
-from barque._utils import PropertyInfo
-from barque._compat import PYDANTIC_V1, parse_obj, model_dump, model_json
-from barque._models import DISCRIMINATOR_CACHE, BaseModel, construct_type
+from compeer._utils import PropertyInfo
+from compeer._compat import PYDANTIC_V1, parse_obj, model_dump, model_json
+from compeer._models import DISCRIMINATOR_CACHE, BaseModel, construct_type
 
 
 class BasicModel(BaseModel):

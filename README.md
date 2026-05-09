@@ -1,9 +1,9 @@
-# Barque Python API library
+# Compeer Python API library
 
 <!-- prettier-ignore -->
-[![PyPI version](https://img.shields.io/pypi/v/barque.svg?label=pypi%20(stable))](https://pypi.org/project/barque/)
+[![PyPI version](https://img.shields.io/pypi/v/compeer.svg?label=pypi%20(stable))](https://pypi.org/project/compeer/)
 
-The Barque Python library provides convenient access to the Barque REST API from any Python 3.9+
+The Compeer Python library provides convenient access to the Compeer REST API from any Python 3.9+
 application. The library includes type definitions for all request params and response fields,
 and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
 
@@ -21,7 +21,7 @@ pip install git+ssh://git@github.com/stainless-sdks/barque-python.git
 ```
 
 > [!NOTE]
-> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install barque`
+> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install compeer`
 
 ## Usage
 
@@ -29,16 +29,14 @@ The full API of this library can be found in [api.md](api.md).
 
 ```python
 import os
-from barque import Barque
+from compeer import Compeer
 
-client = Barque(
+client = Compeer(
     api_key=os.environ.get("BARQUE_API_KEY"),  # This is the default and can be omitted
 )
 
-response = client.captures.search(
-    project_id="projectId",
-    query="query",
-)
+response = client.alive.check()
+print(response.id)
 ```
 
 While you can provide an `api_key` keyword argument,
@@ -48,23 +46,21 @@ so that your API Key is not stored in source control.
 
 ## Async usage
 
-Simply import `AsyncBarque` instead of `Barque` and use `await` with each API call:
+Simply import `AsyncCompeer` instead of `Compeer` and use `await` with each API call:
 
 ```python
 import os
 import asyncio
-from barque import AsyncBarque
+from compeer import AsyncCompeer
 
-client = AsyncBarque(
+client = AsyncCompeer(
     api_key=os.environ.get("BARQUE_API_KEY"),  # This is the default and can be omitted
 )
 
 
 async def main() -> None:
-    response = await client.captures.search(
-        project_id="projectId",
-        query="query",
-    )
+    response = await client.alive.check()
+    print(response.id)
 
 
 asyncio.run(main())
@@ -80,7 +76,7 @@ You can enable this by installing `aiohttp`:
 
 ```sh
 # install from this staging repo
-pip install 'barque[aiohttp] @ git+ssh://git@github.com/stainless-sdks/barque-python.git'
+pip install 'compeer[aiohttp] @ git+ssh://git@github.com/stainless-sdks/barque-python.git'
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
@@ -88,19 +84,17 @@ Then you can enable it by instantiating the client with `http_client=DefaultAioH
 ```python
 import os
 import asyncio
-from barque import DefaultAioHttpClient
-from barque import AsyncBarque
+from compeer import DefaultAioHttpClient
+from compeer import AsyncCompeer
 
 
 async def main() -> None:
-    async with AsyncBarque(
+    async with AsyncCompeer(
         api_key=os.environ.get("BARQUE_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
-        response = await client.captures.search(
-            project_id="projectId",
-            query="query",
-        )
+        response = await client.alive.check()
+        print(response.id)
 
 
 asyncio.run(main())
@@ -117,27 +111,27 @@ Typed requests and responses provide autocomplete and documentation within your 
 
 ## Handling errors
 
-When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `barque.APIConnectionError` is raised.
+When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `compeer.APIConnectionError` is raised.
 
 When the API returns a non-success status code (that is, 4xx or 5xx
-response), a subclass of `barque.APIStatusError` is raised, containing `status_code` and `response` properties.
+response), a subclass of `compeer.APIStatusError` is raised, containing `status_code` and `response` properties.
 
-All errors inherit from `barque.APIError`.
+All errors inherit from `compeer.APIError`.
 
 ```python
-import barque
-from barque import Barque
+import compeer
+from compeer import Compeer
 
-client = Barque()
+client = Compeer()
 
 try:
-    client.projects.read_all()
-except barque.APIConnectionError as e:
+    client.alive.check()
+except compeer.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
-except barque.RateLimitError as e:
+except compeer.RateLimitError as e:
     print("A 429 status code was received; we should back off a bit.")
-except barque.APIStatusError as e:
+except compeer.APIStatusError as e:
     print("Another non-200-range status code was received")
     print(e.status_code)
     print(e.response)
@@ -165,16 +159,16 @@ Connection errors (for example, due to a network connectivity problem), 408 Requ
 You can use the `max_retries` option to configure or disable retry settings:
 
 ```python
-from barque import Barque
+from compeer import Compeer
 
 # Configure the default for all requests:
-client = Barque(
+client = Compeer(
     # default is 2
     max_retries=0,
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).projects.read_all()
+client.with_options(max_retries=5).alive.check()
 ```
 
 ### Timeouts
@@ -183,21 +177,21 @@ By default requests time out after 1 minute. You can configure this with a `time
 which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration) object:
 
 ```python
-from barque import Barque
+from compeer import Compeer
 
 # Configure the default for all requests:
-client = Barque(
+client = Compeer(
     # 20 seconds (default is 1 minute)
     timeout=20.0,
 )
 
 # More granular control:
-client = Barque(
+client = Compeer(
     timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).projects.read_all()
+client.with_options(timeout=5.0).alive.check()
 ```
 
 On timeout, an `APITimeoutError` is thrown.
@@ -210,10 +204,10 @@ Note that requests that time out are [retried twice by default](#retries).
 
 We use the standard library [`logging`](https://docs.python.org/3/library/logging.html) module.
 
-You can enable logging by setting the environment variable `BARQUE_LOG` to `info`.
+You can enable logging by setting the environment variable `COMPEER_LOG` to `info`.
 
 ```shell
-$ export BARQUE_LOG=info
+$ export COMPEER_LOG=info
 ```
 
 Or to `debug` for more verbose logging.
@@ -235,19 +229,19 @@ if response.my_field is None:
 The "raw" Response object can be accessed by prefixing `.with_raw_response.` to any HTTP method call, e.g.,
 
 ```py
-from barque import Barque
+from compeer import Compeer
 
-client = Barque()
-response = client.projects.with_raw_response.read_all()
+client = Compeer()
+response = client.alive.with_raw_response.check()
 print(response.headers.get('X-My-Header'))
 
-project = response.parse()  # get the object that `projects.read_all()` would have returned
-print(project)
+alive = response.parse()  # get the object that `alive.check()` would have returned
+print(alive.id)
 ```
 
-These methods return an [`APIResponse`](https://github.com/stainless-sdks/barque-python/tree/main/src/barque/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/stainless-sdks/barque-python/tree/main/src/compeer/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/barque-python/tree/main/src/barque/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/barque-python/tree/main/src/compeer/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -256,7 +250,7 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.projects.with_streaming_response.read_all() as response:
+with client.alive.with_streaming_response.check() as response:
     print(response.headers.get("X-My-Header"))
 
     for line in response.iter_lines():
@@ -309,10 +303,10 @@ You can directly override the [httpx client](https://www.python-httpx.org/api/#c
 
 ```python
 import httpx
-from barque import Barque, DefaultHttpxClient
+from compeer import Compeer, DefaultHttpxClient
 
-client = Barque(
-    # Or use the `BARQUE_BASE_URL` env var
+client = Compeer(
+    # Or use the `COMPEER_BASE_URL` env var
     base_url="http://my.test.server.example.com:8083",
     http_client=DefaultHttpxClient(
         proxy="http://my.test.proxy.example.com",
@@ -332,9 +326,9 @@ client.with_options(http_client=DefaultHttpxClient(...))
 By default the library closes underlying HTTP connections whenever the client is [garbage collected](https://docs.python.org/3/reference/datamodel.html#object.__del__). You can manually close the client using the `.close()` method if desired, or with a context manager that closes when exiting.
 
 ```py
-from barque import Barque
+from compeer import Compeer
 
-with Barque() as client:
+with Compeer() as client:
   # make requests here
   ...
 
@@ -360,8 +354,8 @@ If you've upgraded to the latest version but aren't seeing any new features you 
 You can determine the version that is being used at runtime with:
 
 ```py
-import barque
-print(barque.__version__)
+import compeer
+print(compeer.__version__)
 ```
 
 ## Requirements

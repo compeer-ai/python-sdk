@@ -5,8 +5,8 @@ from typing import Union
 
 import pydantic
 
-from barque import _compat
-from barque._utils._json import openapi_dumps
+from compeer import _compat
+from compeer._utils._json import openapi_dumps
 
 
 class TestOpenapiDumps:

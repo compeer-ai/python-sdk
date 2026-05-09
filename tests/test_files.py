@@ -4,8 +4,8 @@ import anyio
 import pytest
 from dirty_equals import IsDict, IsList, IsBytes, IsTuple
 
-from barque._files import to_httpx_files, deepcopy_with_paths, async_to_httpx_files
-from barque._utils import extract_files
+from compeer._files import to_httpx_files, deepcopy_with_paths, async_to_httpx_files
+from compeer._utils import extract_files
 
 readme_path = Path(__file__).parent.parent.joinpath("README.md")
 
