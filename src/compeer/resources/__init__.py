@@ -1,13 +1,5 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from .oidc import (
-    OidcResource,
-    AsyncOidcResource,
-    OidcResourceWithRawResponse,
-    AsyncOidcResourceWithRawResponse,
-    OidcResourceWithStreamingResponse,
-    AsyncOidcResourceWithStreamingResponse,
-)
 from .alive import (
     AliveResource,
     AsyncAliveResource,
@@ -15,14 +7,6 @@ from .alive import (
     AsyncAliveResourceWithRawResponse,
     AliveResourceWithStreamingResponse,
     AsyncAliveResourceWithStreamingResponse,
-)
-from .backup import (
-    BackupResource,
-    AsyncBackupResource,
-    BackupResourceWithRawResponse,
-    AsyncBackupResourceWithRawResponse,
-    BackupResourceWithStreamingResponse,
-    AsyncBackupResourceWithStreamingResponse,
 )
 from .search import (
     SearchResource,
@@ -64,18 +48,6 @@ __all__ = [
     "AsyncAliveResourceWithRawResponse",
     "AliveResourceWithStreamingResponse",
     "AsyncAliveResourceWithStreamingResponse",
-    "OidcResource",
-    "AsyncOidcResource",
-    "OidcResourceWithRawResponse",
-    "AsyncOidcResourceWithRawResponse",
-    "OidcResourceWithStreamingResponse",
-    "AsyncOidcResourceWithStreamingResponse",
-    "BackupResource",
-    "AsyncBackupResource",
-    "BackupResourceWithRawResponse",
-    "AsyncBackupResourceWithRawResponse",
-    "BackupResourceWithStreamingResponse",
-    "AsyncBackupResourceWithStreamingResponse",
     "StoresResource",
     "AsyncStoresResource",
     "StoresResourceWithRawResponse",

@@ -9,7 +9,7 @@ import pytest
 
 from compeer import Compeer, AsyncCompeer
 from tests.utils import assert_matches_type
-from compeer.types import SearchGetStoresResponse
+from compeer.types import SearchQueryResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -19,27 +19,27 @@ class TestSearch:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_get_stores(self, client: Compeer) -> None:
-        search = client.search.get_stores(
+    def test_method_query(self, client: Compeer) -> None:
+        search = client.search.query(
             workspace="workspace",
             query="query",
         )
-        assert_matches_type(SearchGetStoresResponse, search, path=["response"])
+        assert_matches_type(SearchQueryResponse, search, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_get_stores_with_all_params(self, client: Compeer) -> None:
-        search = client.search.get_stores(
+    def test_method_query_with_all_params(self, client: Compeer) -> None:
+        search = client.search.query(
             workspace="workspace",
             query="query",
             store="store",
         )
-        assert_matches_type(SearchGetStoresResponse, search, path=["response"])
+        assert_matches_type(SearchQueryResponse, search, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_raw_response_get_stores(self, client: Compeer) -> None:
-        response = client.search.with_raw_response.get_stores(
+    def test_raw_response_query(self, client: Compeer) -> None:
+        response = client.search.with_raw_response.query(
             workspace="workspace",
             query="query",
         )
@@ -47,12 +47,12 @@ class TestSearch:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         search = response.parse()
-        assert_matches_type(SearchGetStoresResponse, search, path=["response"])
+        assert_matches_type(SearchQueryResponse, search, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_streaming_response_get_stores(self, client: Compeer) -> None:
-        with client.search.with_streaming_response.get_stores(
+    def test_streaming_response_query(self, client: Compeer) -> None:
+        with client.search.with_streaming_response.query(
             workspace="workspace",
             query="query",
         ) as response:
@@ -60,15 +60,15 @@ class TestSearch:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             search = response.parse()
-            assert_matches_type(SearchGetStoresResponse, search, path=["response"])
+            assert_matches_type(SearchQueryResponse, search, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_path_params_get_stores(self, client: Compeer) -> None:
+    def test_path_params_query(self, client: Compeer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `workspace` but received ''"):
-            client.search.with_raw_response.get_stores(
+            client.search.with_raw_response.query(
                 workspace="",
                 query="query",
             )
@@ -81,27 +81,27 @@ class TestAsyncSearch:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_method_get_stores(self, async_client: AsyncCompeer) -> None:
-        search = await async_client.search.get_stores(
+    async def test_method_query(self, async_client: AsyncCompeer) -> None:
+        search = await async_client.search.query(
             workspace="workspace",
             query="query",
         )
-        assert_matches_type(SearchGetStoresResponse, search, path=["response"])
+        assert_matches_type(SearchQueryResponse, search, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_method_get_stores_with_all_params(self, async_client: AsyncCompeer) -> None:
-        search = await async_client.search.get_stores(
+    async def test_method_query_with_all_params(self, async_client: AsyncCompeer) -> None:
+        search = await async_client.search.query(
             workspace="workspace",
             query="query",
             store="store",
         )
-        assert_matches_type(SearchGetStoresResponse, search, path=["response"])
+        assert_matches_type(SearchQueryResponse, search, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_raw_response_get_stores(self, async_client: AsyncCompeer) -> None:
-        response = await async_client.search.with_raw_response.get_stores(
+    async def test_raw_response_query(self, async_client: AsyncCompeer) -> None:
+        response = await async_client.search.with_raw_response.query(
             workspace="workspace",
             query="query",
         )
@@ -109,12 +109,12 @@ class TestAsyncSearch:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         search = await response.parse()
-        assert_matches_type(SearchGetStoresResponse, search, path=["response"])
+        assert_matches_type(SearchQueryResponse, search, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_streaming_response_get_stores(self, async_client: AsyncCompeer) -> None:
-        async with async_client.search.with_streaming_response.get_stores(
+    async def test_streaming_response_query(self, async_client: AsyncCompeer) -> None:
+        async with async_client.search.with_streaming_response.query(
             workspace="workspace",
             query="query",
         ) as response:
@@ -122,15 +122,15 @@ class TestAsyncSearch:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             search = await response.parse()
-            assert_matches_type(SearchGetStoresResponse, search, path=["response"])
+            assert_matches_type(SearchQueryResponse, search, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_path_params_get_stores(self, async_client: AsyncCompeer) -> None:
+    async def test_path_params_query(self, async_client: AsyncCompeer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `workspace` but received ''"):
-            await async_client.search.with_raw_response.get_stores(
+            await async_client.search.with_raw_response.query(
                 workspace="",
                 query="query",
             )

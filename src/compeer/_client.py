@@ -37,10 +37,8 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import oidc, alive, backup, search, stores, capture, workspaces
-    from .resources.oidc import OidcResource, AsyncOidcResource
+    from .resources import alive, search, stores, capture, workspaces
     from .resources.alive import AliveResource, AsyncAliveResource
-    from .resources.backup import BackupResource, AsyncBackupResource
     from .resources.search import SearchResource, AsyncSearchResource
     from .resources.stores import StoresResource, AsyncStoresResource
     from .resources.capture import CaptureResource, AsyncCaptureResource
@@ -52,11 +50,13 @@ __all__ = ["Timeout", "Transport", "ProxiesTypes", "RequestOptions", "Compeer", 
 class Compeer(SyncAPIClient):
     # client options
     api_key: str | None
+    bearer_token: str | None
 
     def __init__(
         self,
         *,
         api_key: str | None = None,
+        bearer_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -84,10 +84,12 @@ class Compeer(SyncAPIClient):
             api_key = os.environ.get("BARQUE_API_KEY")
         self.api_key = api_key
 
+        self.bearer_token = bearer_token
+
         if base_url is None:
             base_url = os.environ.get("COMPEER_BASE_URL")
         if base_url is None:
-            base_url = f"http://localhost:3000"
+            base_url = f"http://localhost:3000/api/v1"
 
         custom_headers_env = os.environ.get("COMPEER_CUSTOM_HEADERS")
         if custom_headers_env is not None:
@@ -114,18 +116,6 @@ class Compeer(SyncAPIClient):
         from .resources.alive import AliveResource
 
         return AliveResource(self)
-
-    @cached_property
-    def oidc(self) -> OidcResource:
-        from .resources.oidc import OidcResource
-
-        return OidcResource(self)
-
-    @cached_property
-    def backup(self) -> BackupResource:
-        from .resources.backup import BackupResource
-
-        return BackupResource(self)
 
     @cached_property
     def stores(self) -> StoresResource:
@@ -168,14 +158,22 @@ class Compeer(SyncAPIClient):
     def _auth_headers(self, security: SecurityOptions) -> dict[str, str]:
         return {
             **(self._bearer_auth if security.get("bearer_auth", False) else {}),
+            **(self._api_key_auth if security.get("api_key_auth", False) else {}),
         }
 
     @property
     def _bearer_auth(self) -> dict[str, str]:
+        bearer_token = self.bearer_token
+        if bearer_token is None:
+            return {}
+        return {"Authorization": f"Bearer {bearer_token}"}
+
+    @property
+    def _api_key_auth(self) -> dict[str, str]:
         api_key = self.api_key
         if api_key is None:
             return {}
-        return {"Authorization": f"Bearer {api_key}"}
+        return {"X-Api-key": api_key}
 
     @property
     @override
@@ -191,14 +189,18 @@ class Compeer(SyncAPIClient):
         if headers.get("Authorization") or isinstance(custom_headers.get("Authorization"), Omit):
             return
 
+        if headers.get("X-Api-key") or isinstance(custom_headers.get("X-Api-key"), Omit):
+            return
+
         raise TypeError(
-            '"Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted"'
+            '"Could not resolve authentication method. Expected either bearer_token or api_key to be set. Or for one of the `Authorization` or `X-Api-key` headers to be explicitly omitted"'
         )
 
     def copy(
         self,
         *,
         api_key: str | None = None,
+        bearer_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.Client | None = None,
@@ -233,6 +235,7 @@ class Compeer(SyncAPIClient):
         http_client = http_client or self._client
         return self.__class__(
             api_key=api_key or self.api_key,
+            bearer_token=bearer_token or self.bearer_token,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
@@ -283,11 +286,13 @@ class Compeer(SyncAPIClient):
 class AsyncCompeer(AsyncAPIClient):
     # client options
     api_key: str | None
+    bearer_token: str | None
 
     def __init__(
         self,
         *,
         api_key: str | None = None,
+        bearer_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -315,10 +320,12 @@ class AsyncCompeer(AsyncAPIClient):
             api_key = os.environ.get("BARQUE_API_KEY")
         self.api_key = api_key
 
+        self.bearer_token = bearer_token
+
         if base_url is None:
             base_url = os.environ.get("COMPEER_BASE_URL")
         if base_url is None:
-            base_url = f"http://localhost:3000"
+            base_url = f"http://localhost:3000/api/v1"
 
         custom_headers_env = os.environ.get("COMPEER_CUSTOM_HEADERS")
         if custom_headers_env is not None:
@@ -345,18 +352,6 @@ class AsyncCompeer(AsyncAPIClient):
         from .resources.alive import AsyncAliveResource
 
         return AsyncAliveResource(self)
-
-    @cached_property
-    def oidc(self) -> AsyncOidcResource:
-        from .resources.oidc import AsyncOidcResource
-
-        return AsyncOidcResource(self)
-
-    @cached_property
-    def backup(self) -> AsyncBackupResource:
-        from .resources.backup import AsyncBackupResource
-
-        return AsyncBackupResource(self)
 
     @cached_property
     def stores(self) -> AsyncStoresResource:
@@ -399,14 +394,22 @@ class AsyncCompeer(AsyncAPIClient):
     def _auth_headers(self, security: SecurityOptions) -> dict[str, str]:
         return {
             **(self._bearer_auth if security.get("bearer_auth", False) else {}),
+            **(self._api_key_auth if security.get("api_key_auth", False) else {}),
         }
 
     @property
     def _bearer_auth(self) -> dict[str, str]:
+        bearer_token = self.bearer_token
+        if bearer_token is None:
+            return {}
+        return {"Authorization": f"Bearer {bearer_token}"}
+
+    @property
+    def _api_key_auth(self) -> dict[str, str]:
         api_key = self.api_key
         if api_key is None:
             return {}
-        return {"Authorization": f"Bearer {api_key}"}
+        return {"X-Api-key": api_key}
 
     @property
     @override
@@ -422,14 +425,18 @@ class AsyncCompeer(AsyncAPIClient):
         if headers.get("Authorization") or isinstance(custom_headers.get("Authorization"), Omit):
             return
 
+        if headers.get("X-Api-key") or isinstance(custom_headers.get("X-Api-key"), Omit):
+            return
+
         raise TypeError(
-            '"Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted"'
+            '"Could not resolve authentication method. Expected either bearer_token or api_key to be set. Or for one of the `Authorization` or `X-Api-key` headers to be explicitly omitted"'
         )
 
     def copy(
         self,
         *,
         api_key: str | None = None,
+        bearer_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.AsyncClient | None = None,
@@ -464,6 +471,7 @@ class AsyncCompeer(AsyncAPIClient):
         http_client = http_client or self._client
         return self.__class__(
             api_key=api_key or self.api_key,
+            bearer_token=bearer_token or self.bearer_token,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
@@ -524,18 +532,6 @@ class CompeerWithRawResponse:
         return AliveResourceWithRawResponse(self._client.alive)
 
     @cached_property
-    def oidc(self) -> oidc.OidcResourceWithRawResponse:
-        from .resources.oidc import OidcResourceWithRawResponse
-
-        return OidcResourceWithRawResponse(self._client.oidc)
-
-    @cached_property
-    def backup(self) -> backup.BackupResourceWithRawResponse:
-        from .resources.backup import BackupResourceWithRawResponse
-
-        return BackupResourceWithRawResponse(self._client.backup)
-
-    @cached_property
     def stores(self) -> stores.StoresResourceWithRawResponse:
         from .resources.stores import StoresResourceWithRawResponse
 
@@ -571,18 +567,6 @@ class AsyncCompeerWithRawResponse:
         from .resources.alive import AsyncAliveResourceWithRawResponse
 
         return AsyncAliveResourceWithRawResponse(self._client.alive)
-
-    @cached_property
-    def oidc(self) -> oidc.AsyncOidcResourceWithRawResponse:
-        from .resources.oidc import AsyncOidcResourceWithRawResponse
-
-        return AsyncOidcResourceWithRawResponse(self._client.oidc)
-
-    @cached_property
-    def backup(self) -> backup.AsyncBackupResourceWithRawResponse:
-        from .resources.backup import AsyncBackupResourceWithRawResponse
-
-        return AsyncBackupResourceWithRawResponse(self._client.backup)
 
     @cached_property
     def stores(self) -> stores.AsyncStoresResourceWithRawResponse:
@@ -622,18 +606,6 @@ class CompeerWithStreamedResponse:
         return AliveResourceWithStreamingResponse(self._client.alive)
 
     @cached_property
-    def oidc(self) -> oidc.OidcResourceWithStreamingResponse:
-        from .resources.oidc import OidcResourceWithStreamingResponse
-
-        return OidcResourceWithStreamingResponse(self._client.oidc)
-
-    @cached_property
-    def backup(self) -> backup.BackupResourceWithStreamingResponse:
-        from .resources.backup import BackupResourceWithStreamingResponse
-
-        return BackupResourceWithStreamingResponse(self._client.backup)
-
-    @cached_property
     def stores(self) -> stores.StoresResourceWithStreamingResponse:
         from .resources.stores import StoresResourceWithStreamingResponse
 
@@ -669,18 +641,6 @@ class AsyncCompeerWithStreamedResponse:
         from .resources.alive import AsyncAliveResourceWithStreamingResponse
 
         return AsyncAliveResourceWithStreamingResponse(self._client.alive)
-
-    @cached_property
-    def oidc(self) -> oidc.AsyncOidcResourceWithStreamingResponse:
-        from .resources.oidc import AsyncOidcResourceWithStreamingResponse
-
-        return AsyncOidcResourceWithStreamingResponse(self._client.oidc)
-
-    @cached_property
-    def backup(self) -> backup.AsyncBackupResourceWithStreamingResponse:
-        from .resources.backup import AsyncBackupResourceWithStreamingResponse
-
-        return AsyncBackupResourceWithStreamingResponse(self._client.backup)
 
     @cached_property
     def stores(self) -> stores.AsyncStoresResourceWithStreamingResponse:

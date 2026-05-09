@@ -10,30 +10,6 @@ Methods:
 
 - <code title="get /alive">client.alive.<a href="./src/compeer/resources/alive.py">check</a>() -> <a href="./src/compeer/types/alive_check_response.py">AliveCheckResponse</a></code>
 
-# Oidc
-
-Types:
-
-```python
-from compeer.types import OidcRetrieveResponse
-```
-
-Methods:
-
-- <code title="get /oidc">client.oidc.<a href="./src/compeer/resources/oidc.py">retrieve</a>() -> <a href="./src/compeer/types/oidc_retrieve_response.py">OidcRetrieveResponse</a></code>
-
-# Backup
-
-Types:
-
-```python
-from compeer.types import BackupRetrieveResponse
-```
-
-Methods:
-
-- <code title="get /backup">client.backup.<a href="./src/compeer/resources/backup.py">retrieve</a>() -> <a href="./src/compeer/types/backup_retrieve_response.py">BackupRetrieveResponse</a></code>
-
 # Stores
 
 Types:
@@ -51,12 +27,12 @@ Methods:
 Types:
 
 ```python
-from compeer.types import SearchGetStoresResponse
+from compeer.types import SearchQueryResponse
 ```
 
 Methods:
 
-- <code title="get /{workspace}/search">client.search.<a href="./src/compeer/resources/search.py">get_stores</a>(workspace, \*\*<a href="src/compeer/types/search_get_stores_params.py">params</a>) -> <a href="./src/compeer/types/search_get_stores_response.py">SearchGetStoresResponse</a></code>
+- <code title="get /{workspace}/search">client.search.<a href="./src/compeer/resources/search.py">query</a>(workspace, \*\*<a href="src/compeer/types/search_query_params.py">params</a>) -> <a href="./src/compeer/types/search_query_response.py">SearchQueryResponse</a></code>
 
 # Workspaces
 

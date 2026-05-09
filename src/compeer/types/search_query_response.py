@@ -4,10 +4,10 @@ from pydantic import Field as FieldInfo
 
 from .._models import BaseModel
 
-__all__ = ["SearchGetStoresResponse"]
+__all__ = ["SearchQueryResponse"]
 
 
-class SearchGetStoresResponse(BaseModel):
+class SearchQueryResponse(BaseModel):
     capture_id: str = FieldInfo(alias="captureId")
 
     content: str
