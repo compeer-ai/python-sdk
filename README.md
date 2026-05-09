@@ -28,33 +28,26 @@ pip install git+ssh://git@github.com/stainless-sdks/barque-python.git
 The full API of this library can be found in [api.md](api.md).
 
 ```python
-import os
 from compeer import Compeer
 
 client = Compeer(
-    api_key=os.environ.get("BARQUE_API_KEY"),  # This is the default and can be omitted
+    bearer_token="My Bearer Token",
 )
 
 response = client.alive.check()
 print(response.id)
 ```
 
-While you can provide an `api_key` keyword argument,
-we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `BARQUE_API_KEY="My API Key"` to your `.env` file
-so that your API Key is not stored in source control.
-
 ## Async usage
 
 Simply import `AsyncCompeer` instead of `Compeer` and use `await` with each API call:
 
 ```python
-import os
 import asyncio
 from compeer import AsyncCompeer
 
 client = AsyncCompeer(
-    api_key=os.environ.get("BARQUE_API_KEY"),  # This is the default and can be omitted
+    bearer_token="My Bearer Token",
 )
 
 
@@ -82,7 +75,6 @@ pip install 'compeer[aiohttp] @ git+ssh://git@github.com/stainless-sdks/barque-p
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
 
 ```python
-import os
 import asyncio
 from compeer import DefaultAioHttpClient
 from compeer import AsyncCompeer
@@ -90,7 +82,7 @@ from compeer import AsyncCompeer
 
 async def main() -> None:
     async with AsyncCompeer(
-        api_key=os.environ.get("BARQUE_API_KEY"),  # This is the default and can be omitted
+        bearer_token="My Bearer Token",
         http_client=DefaultAioHttpClient(),
     ) as client:
         response = await client.alive.check()

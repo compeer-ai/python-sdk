@@ -1,4 +1,4 @@
-configured_endpoints: 7
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/barque/barque-57abba2ca9b32ed93ce299483a5373630b2f11df9ba7643052b491f6988428dd.yml
+configured_endpoints: 5
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/barque/barque-935a6cf79fa0fb8ff764d08f2710cdddc2c57f8ab1a3b15ce2ddc21f55eba9d8.yml
 openapi_spec_hash: 8f20f149c9d48f6efbce7d097e1937ed
-config_hash: 80b6aeb7b26524794461fa2c452079dd
+config_hash: 62d28cc5141be5affb562b2f9c08b028

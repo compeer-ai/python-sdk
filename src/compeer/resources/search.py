@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ..types import search_get_stores_params
+from ..types import search_query_params
 from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
@@ -16,7 +16,7 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.search_get_stores_response import SearchGetStoresResponse
+from ..types.search_query_response import SearchQueryResponse
 
 __all__ = ["SearchResource", "AsyncSearchResource"]
 
@@ -41,7 +41,7 @@ class SearchResource(SyncAPIResource):
         """
         return SearchResourceWithStreamingResponse(self)
 
-    def get_stores(
+    def query(
         self,
         workspace: str,
         *,
@@ -53,7 +53,7 @@ class SearchResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> SearchGetStoresResponse:
+    ) -> SearchQueryResponse:
         """
         Get a workspace's stores
 
@@ -80,10 +80,10 @@ class SearchResource(SyncAPIResource):
                         "query": query,
                         "store": store,
                     },
-                    search_get_stores_params.SearchGetStoresParams,
+                    search_query_params.SearchQueryParams,
                 ),
             ),
-            cast_to=SearchGetStoresResponse,
+            cast_to=SearchQueryResponse,
         )
 
 
@@ -107,7 +107,7 @@ class AsyncSearchResource(AsyncAPIResource):
         """
         return AsyncSearchResourceWithStreamingResponse(self)
 
-    async def get_stores(
+    async def query(
         self,
         workspace: str,
         *,
@@ -119,7 +119,7 @@ class AsyncSearchResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> SearchGetStoresResponse:
+    ) -> SearchQueryResponse:
         """
         Get a workspace's stores
 
@@ -146,10 +146,10 @@ class AsyncSearchResource(AsyncAPIResource):
                         "query": query,
                         "store": store,
                     },
-                    search_get_stores_params.SearchGetStoresParams,
+                    search_query_params.SearchQueryParams,
                 ),
             ),
-            cast_to=SearchGetStoresResponse,
+            cast_to=SearchQueryResponse,
         )
 
 
@@ -157,8 +157,8 @@ class SearchResourceWithRawResponse:
     def __init__(self, search: SearchResource) -> None:
         self._search = search
 
-        self.get_stores = to_raw_response_wrapper(
-            search.get_stores,
+        self.query = to_raw_response_wrapper(
+            search.query,
         )
 
 
@@ -166,8 +166,8 @@ class AsyncSearchResourceWithRawResponse:
     def __init__(self, search: AsyncSearchResource) -> None:
         self._search = search
 
-        self.get_stores = async_to_raw_response_wrapper(
-            search.get_stores,
+        self.query = async_to_raw_response_wrapper(
+            search.query,
         )
 
 
@@ -175,8 +175,8 @@ class SearchResourceWithStreamingResponse:
     def __init__(self, search: SearchResource) -> None:
         self._search = search
 
-        self.get_stores = to_streamed_response_wrapper(
-            search.get_stores,
+        self.query = to_streamed_response_wrapper(
+            search.query,
         )
 
 
@@ -184,6 +184,6 @@ class AsyncSearchResourceWithStreamingResponse:
     def __init__(self, search: AsyncSearchResource) -> None:
         self._search = search
 
-        self.get_stores = async_to_streamed_response_wrapper(
-            search.get_stores,
+        self.query = async_to_streamed_response_wrapper(
+            search.query,
         )

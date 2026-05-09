@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from typing_extensions import Required, TypedDict
 
-__all__ = ["SearchGetStoresParams"]
+__all__ = ["SearchQueryParams"]
 
 
-class SearchGetStoresParams(TypedDict, total=False):
+class SearchQueryParams(TypedDict, total=False):
     query: Required[str]
 
     store: str
