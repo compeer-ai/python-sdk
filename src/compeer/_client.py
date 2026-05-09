@@ -78,10 +78,10 @@ class Compeer(SyncAPIClient):
     ) -> None:
         """Construct a new synchronous Compeer client instance.
 
-        This automatically infers the `api_key` argument from the `BARQUE_API_KEY` environment variable if it is not provided.
+        This automatically infers the `api_key` argument from the `COMPEER_APIKEY` environment variable if it is not provided.
         """
         if api_key is None:
-            api_key = os.environ.get("BARQUE_API_KEY")
+            api_key = os.environ.get("COMPEER_APIKEY")
         self.api_key = api_key
 
         self.bearer_token = bearer_token
@@ -314,10 +314,10 @@ class AsyncCompeer(AsyncAPIClient):
     ) -> None:
         """Construct a new async AsyncCompeer client instance.
 
-        This automatically infers the `api_key` argument from the `BARQUE_API_KEY` environment variable if it is not provided.
+        This automatically infers the `api_key` argument from the `COMPEER_APIKEY` environment variable if it is not provided.
         """
         if api_key is None:
-            api_key = os.environ.get("BARQUE_API_KEY")
+            api_key = os.environ.get("COMPEER_APIKEY")
         self.api_key = api_key
 
         self.bearer_token = bearer_token
