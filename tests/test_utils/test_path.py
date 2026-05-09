@@ -4,7 +4,7 @@ from typing import Any
 
 import pytest
 
-from barque._utils._path import path_template
+from compeer._utils._path import path_template
 
 
 @pytest.mark.parametrize(

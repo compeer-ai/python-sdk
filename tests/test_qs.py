@@ -4,7 +4,7 @@ from urllib.parse import unquote
 
 import pytest
 
-from barque._qs import Querystring, stringify
+from compeer._qs import Querystring, stringify
 
 
 def test_empty() -> None:
