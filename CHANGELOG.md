@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.2.0 (2026-06-18)
+
+Full Changelog: [v0.1.0...v0.2.0](https://github.com/compeer-ai/python-sdk/compare/v0.1.0...v0.2.0)
+
+### Features
+
+* **internal/types:** support eagerly validating pydantic iterators ([e673e54](https://github.com/compeer-ai/python-sdk/commit/e673e5416d02b48d60d244772219b9431517cd28))
+
+
+### Bug Fixes
+
+* **auth:** prioritize first auth header ([8713f5c](https://github.com/compeer-ai/python-sdk/commit/8713f5cf7e8f38d58ffd60fa884ede08b3bea385))
+
+
+### Chores
+
+* update SDK settings ([457568e](https://github.com/compeer-ai/python-sdk/commit/457568e913bf1302344882c827296cc1ee09a1c5))
+* update SDK settings ([6f65f2e](https://github.com/compeer-ai/python-sdk/commit/6f65f2ea6936a001e067d324bf21bfa7d0d15e38))
+
 ## 0.1.0 (2026-05-09)
 
 Full Changelog: [v0.0.1...v0.1.0](https://github.com/compeer-ai/python-sdk/compare/v0.0.1...v0.1.0)
